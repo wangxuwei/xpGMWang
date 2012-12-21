@@ -1,0 +1,36 @@
+<script id="tmpl-MailInfo" type="text/html">
+	<div class="MailInfo modal">
+		<div class="MailInfo-header modal-header">
+			<div class="close btnClose"><i class="icon-remove"></i></div>
+			<h3>{{#if id}}Update{{else}}Create{{/if}} Mail</h3>
+		</div>
+		<div class="MailInfo-content modal-body">
+			<div class="form-horizontal">
+				<div class="control-group">
+					<div class="control-label">Mail name:</div>
+					<div class="controls">
+						<input type='text' name="name" value="{{name}}" />
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="control-label">Email:</div>
+					<div class="controls">
+						<input type='text' name="email" value="{{email}}" />
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="control-label">Groups:</div>
+					<div class="controls">
+					{{#each groupList}}
+						<input type='checkbox' name="groupId" value="{{fullId}}" {{#if selected}}checked{{/if}}/>{{name}}<br/>
+					{{/each}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="MailInfo-footer modal-footer">
+			<div class="btn btn-primary btnCreate">Save</div>
+			<div class="btn btnClose">Close</div>
+		</div>
+	</div>  
+</script>

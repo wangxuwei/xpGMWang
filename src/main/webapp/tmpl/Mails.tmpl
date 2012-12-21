@@ -1,0 +1,28 @@
+<script id="tmpl-Mails" type="text/html">
+    <div class="Mails">
+    	<h2>Mails</h2>
+    	<div>
+    	</div>
+    	<div class="dataTable">
+	        <div class="thead">
+	          <div class="trow">
+	          	<div class="tcell">Index</div>
+	          	<div class="tcell">Subject</div>
+	          	<div class="tcell">From</div>
+	          	<div class="tcell">Action</div>
+	          </div>
+	        </div>
+	        <div class="tbody lists">
+	        </div>
+	  </div>
+    </div>
+</script>
+<script id="tmpl-Mails-rowItem" type="text/html">
+	 <div class="trow" data-entity="{{type}}" data-entity-id="{{id}}">
+	     <div class="tcell">{{index}}</div>
+	     <div class="tcell">{{subject}}</div>
+	     <div class="tcell">{{from.address}}</div>
+	     <div class="tcell">
+	     </div>
+     </div>
+</script>
