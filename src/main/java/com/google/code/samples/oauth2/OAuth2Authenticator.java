@@ -38,6 +38,7 @@ public class OAuth2Authenticator {
 
     private static IMAPStore     imapStore     = null;
     private static SMTPTransport smtpTransport = null;
+    private static Session session = null;
 
     public static final class OAuth2Provider extends Provider {
         private static final long serialVersionUID = 1L;
@@ -128,15 +129,7 @@ public class OAuth2Authenticator {
      */
     public static SMTPTransport connectToSmtp(String host, int port, String userEmail, String oauthToken, boolean debug)
                             throws Exception {
-        Properties props = new Properties();
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.starttls.required", "true");
-        props.put("mail.smtp.sasl.enable", "true");
-        props.put("mail.smtp.sasl.mechanisms", "XOAUTH2");
-        props.put(OAuth2SaslClientFactory.OAUTH_TOKEN_PROP, oauthToken);
-        Session session = Session.getInstance(props);
-        session.setDebug(debug);
-
+        Session session = getSession(oauthToken);
         final URLName unusedUrlName = null;
         SMTPTransport transport = new SMTPTransport(session, unusedUrlName);
         // If the password is non-null, SMTP tries to do AUTH LOGIN.
@@ -144,6 +137,19 @@ public class OAuth2Authenticator {
         transport.connect(host, port, userEmail, emptyPassword);
 
         return transport;
+    }
+    
+    public static Session getSession(String oauthToken) {
+        if(session == null){
+            Properties props = new Properties();
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.starttls.required", "true");
+            props.put("mail.smtp.sasl.enable", "true");
+            props.put("mail.smtp.sasl.mechanisms", "XOAUTH2");
+            props.put(OAuth2SaslClientFactory.OAUTH_TOKEN_PROP, oauthToken);
+            session = Session.getInstance(props);
+        }
+        return session;
     }
 
     /**

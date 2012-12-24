@@ -12,14 +12,12 @@ var app = app || {};
 		params.id = id;
 		return app.getJsonData(contextPath+"/getMail.json",params);
 	}
-	app.actions.saveMail = function(id,fullId,name,email,groupIds){
+	app.actions.sendMail = function(to,subject,content){
 		var params = {mehotd:"Post"};
-		params.id = id;
-		params.fullId = fullId;
-		params.name = name;
-		params.email = email;
-		params.groupIds = groupIds;
-		return app.getJsonData(contextPath+"/saveMail.do",params);
+		params.to = to;
+		params.subject = subject;
+		params.content = content;
+		return app.getJsonData(contextPath+"/sendMail.do",params);
 	}
 	app.actions.deleteMail = function(id){
 		var params = {mehotd:"Post"};

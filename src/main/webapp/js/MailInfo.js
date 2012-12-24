@@ -23,22 +23,7 @@
 			}
 			
 			
-			$.when(dfd,app.actions.listGroups()).done(function(mail,groupsObj) {
-				var groupList = groupsObj.result;
-				if(mail.groupIds){
-					for(var i = 0; i < groupList.length; i++){
-						for(var j = 0; j < mail.groupIds.length; j++){
-							if(groupList[i].fullId == mail.groupIds[j]){
-								groupList[i].selected = true;
-								break;
-							}
-						}
-					}
-				}
-				mail.groupList = groupList;
-				view.mailId = mail.id || null;
-				view.mailFullId = mail.mailFullId || null;
-				view.groupIds = mail.groupIds || [];
+			$.when(dfd).done(function(mail) {
 				var $html = app.render("#tmpl-MailInfo",mail);
 				//show a screen to prevent use click other places
 				view.$screen = $("<div class='notTransparentScreen'></div>").appendTo("body");
@@ -54,7 +39,7 @@
 	 			view.close();
 	 		}, 
 	 		"btap; .btnCreate": function(){
-	 			saveMail.call(this);
+	 			sendMail.call(this);
 	 		}
 		},
 
@@ -68,22 +53,16 @@
 	});
 
 	// --------- View Private Methods --------- //
-	function saveMail() {
+	function sendMail() {
 		var view = this;
 		var $e = view.$el;
 
-		var name = $e.find("input[name='name']").val();
-		var email = $e.find("input[name='email']").val();
-		var groupIds = "";
-		$e.find("input[name='groupId']:checked").each(function(i,obj){
-			if(i != 0){
-				groupIds += ",";
-			}
-			groupIds += $(this).val();
-		});
+		var content = $e.find("textarea[name='content']").val();
+		var to = $e.find("input[name='to']").val();
+		var subject = $e.find("input[name='subject']").val();
 		
 		// if mail id exist do update,else do create
-		app.actions.saveMail(view.mailId,view.mailFullId, name,email,groupIds).done(function() {
+		app.actions.sendMail(to,subject,content).done(function() {
 			$(document).trigger("DO_REFRESH_MAIL");
 			view.close();
 		}); 

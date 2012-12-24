@@ -25,24 +25,8 @@
 	 			var view = this;
 	 			var $e = view.$el;
 	 			var str = app.oauth.authorize(view.service);
-				view.params = str;
-				$e.find(".emailContent").show();
-				$e.find(".authContent").hide();
-				$e.find(".btnSave").show(); 
-
-	 		},
-	 		"btap; .btnSave": function(){
-	 			var view = this;
-	 			var $e = view.$el;
-	 			var email = $e.find("input[name='email']").val();
-	 			if(email == ""){
-	 				alert("email is required");
-	 			}else if(!view.params){
-	 				alert("do auth first");
-	 			}else{
-		 			app.oauth.setToken(view.params,"GG",email).done(function(){
-			 			window.location = contextPath + "/";
-					});
+				if(str == "DONE_TOKEN_SAVE"){
+	 				window.location = contextPath + "/";
 	 			}
 	 		}
 		},

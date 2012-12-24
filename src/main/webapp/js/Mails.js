@@ -21,7 +21,8 @@
             },
             events:{
             	"click;.btnAdd":function(e){
-            		brite.display("MailInfo",null,{id:null});
+            		console.log(1);
+            		brite.display("MailInfo");
             	},
             	"click;.btnEdit":function(e){
             		var view = this;

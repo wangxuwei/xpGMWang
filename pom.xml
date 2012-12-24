@@ -87,10 +87,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 			<version>1.4.5</version>
 		</dependency>
 		<dependency>
-	<groupId>com.sun.mail</groupId>
-	<artifactId>imap</artifactId>
-	<version>1.4.5</version>
-</dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>imap</artifactId>
+			<version>1.4.5</version>
+		</dependency>
 		<!-- /Mail -->
 
 		<!-- Logging -->

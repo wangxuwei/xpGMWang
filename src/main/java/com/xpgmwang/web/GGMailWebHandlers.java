@@ -7,6 +7,9 @@ import java.util.Map;
 
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import com.britesnow.snow.web.RequestContext;
 import com.britesnow.snow.web.handler.annotation.WebActionHandler;
@@ -16,6 +19,7 @@ import com.britesnow.snow.web.param.annotation.WebParam;
 import com.google.code.samples.oauth2.OAuth2Authenticator;
 import com.google.inject.Singleton;
 import com.sun.mail.imap.IMAPStore;
+import com.sun.mail.smtp.SMTPTransport;
 
 @Singleton
 public class GGMailWebHandlers {
@@ -28,11 +32,13 @@ public class GGMailWebHandlers {
         try{
             Folder folder = imap.getFolder("Inbox");
             folder.open(Folder.READ_WRITE);
+            int fromIndex = 1;
             Message[] messages = folder.getMessages(1, 10);
             if(messages != null){
                 for(int i = 0; i < messages.length; i++){
                     Message message = messages[i];
                     Map map = getMapFromMessage(message);
+                    map.put("id", (fromIndex+i));
                     result.add(map);
                 }
             }
@@ -43,14 +49,41 @@ public class GGMailWebHandlers {
     }
 
     @WebModelHandler(startsWith = "/getMail")
-    public void getMail(@WebModel Map m, @WebParam("id") String id, RequestContext rc) {
+    public void getMail(@WebModel Map m, @WebParam("id") Integer id, RequestContext rc) {
         String token = rc.getUser(String.class);
+        String email = rc.getCookie("email");
+        IMAPStore imap = OAuth2Authenticator.getImapStore(email,token);
+        Map map = null;
+        try{
+            Folder folder = imap.getFolder("Inbox");
+            folder.open(Folder.READ_WRITE);
+            Message message = folder.getMessage(id);
+            map = this.getMapFromMessage(message);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        m.put("result",map);
     }
 
     @WebActionHandler
-    public Object saveMail(@WebModel Map m, @WebParam("id") String id,@WebParam("fullId") String fullId, @WebParam("name") String name,
-                            @WebParam("email") String email,@WebParam("groupIds") String groupIdsStr, RequestContext rc) {
+    public Object sendMail(@WebModel Map m, @WebParam("subject") String subject,
+                            @WebParam("content") String content,@WebParam("to") String to, RequestContext rc) {
         String token = rc.getUser(String.class);
+        String email = rc.getCookie("email");
+        SMTPTransport transport = OAuth2Authenticator.getSmtpTransport(email, token);
+        Session mailSession = OAuth2Authenticator.getSession(token);
+        Message msg = new MimeMessage(mailSession);
+        try {
+            msg.setFrom(new InternetAddress(email));  
+            msg.setSubject(subject);  
+            msg.setContent(content, "text/html;charset=UTF-8");  
+            InternetAddress[] iaRecevers = new InternetAddress[1];  
+            iaRecevers[0] = new InternetAddress(to);
+            msg.setRecipients(Message.RecipientType.TO, iaRecevers);  
+            transport.sendMessage(msg, msg.getAllRecipients());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }  
         return null;
     }
 

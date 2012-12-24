@@ -22,7 +22,7 @@ public class OAuthManager {
                                                                          + "&redirect_uri="
                                                                          + GG_CALLBACK_URL
                                                                          + "&access_type=offline"
-                                                                         + "&scope=https://mail.google.com/";
+                                                                         + "&scope=https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
     private static final String GG_TOKEN_URL     = "https://accounts.google.com/o/oauth2/token";
 
     public String authorize(String service) {

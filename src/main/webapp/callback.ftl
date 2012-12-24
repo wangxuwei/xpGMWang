@@ -30,8 +30,10 @@
 	$(function(){
 		var url = window.location+"";
 		params = url.substring(url.indexOf("?")+1, url.length);
-		window.returnValue = params;
-		window.close();
+		app.oauth.setToken(params,"GG").done(function(){
+			window.returnValue = "DONE_TOKEN_SAVE";
+			window.close();
+		});
 	});
 	</script>
   </body>

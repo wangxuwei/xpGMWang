@@ -6,11 +6,10 @@ var app = app || {};
 		return window.showModalDialog(contextPath+"/authorize.json?service="+service);
 	}
 	
-	app.oauth.setToken = function(paramsStr,service,email){
+	app.oauth.setToken = function(paramsStr,service){
 		var params = {mehotd:"POST"};
 		params.params = paramsStr;
 		params.service = service;
-		params.email = email;
 		return app.getJsonData(contextPath+"/setToken.do",params);
 	}
 })(jQuery);
