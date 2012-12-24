@@ -1,38 +1,33 @@
-<script id="tmpl-MailInfo" type="text/html">
-	<div class="MailInfo modal">
-		<div class="MailInfo-header modal-header">
+<script id="tmpl-MailSend" type="text/html">
+	<div class="MailSend modal">
+		<div class="MailSend-header modal-header">
 			<div class="close btnClose"><i class="icon-remove"></i></div>
-			<h3>{{subject}}</h3>
+			<h3>New Mail</h3>
 		</div>
-		<div class="MailInfo-content modal-body">
+		<div class="MailSend-content modal-body">
 			<div class="form-horizontal">
 				<div class="control-group">
 					<div class="control-label">Subject:</div>
 					<div class="controls">
-						{{subject}}
+						<input type='text' name="subject" value="" />
 					</div>
 				</div>
 				<div class="control-group">
-					<div class="control-label">From:</div>
+					<div class="control-label">To:</div>
 					<div class="controls">
-						{{from.address}}
-					</div>
-				</div>
-				<div class="control-group">
-					<div class="control-label">Date:</div>
-					<div class="controls">
-						{{date}}
+						<input type='text' name="to" value="" />
 					</div>
 				</div>
 				<div class="control-group">
 					<div class="control-label">Content:</div>
 					<div class="controls">
-						{{{html content}}}
+						<textarea name="content"></textarea>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="MailInfo-footer modal-footer">
+		<div class="MailSend-footer modal-footer">
+			<div class="btn btn-primary btnCreate">Send</div>
 			<div class="btn btnClose">Close</div>
 		</div>
 	</div>  

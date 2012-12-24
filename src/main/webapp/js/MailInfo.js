@@ -22,7 +22,6 @@
 				dfd.resolve({});
 			}
 			
-			
 			$.when(dfd).done(function(mail) {
 				var $html = app.render("#tmpl-MailInfo",mail);
 				//show a screen to prevent use click other places
@@ -37,9 +36,6 @@
 	 		"btap; .btnClose": function(){
 	 			var view = this;
 	 			view.close();
-	 		}, 
-	 		"btap; .btnCreate": function(){
-	 			sendMail.call(this);
 	 		}
 		},
 
@@ -53,22 +49,6 @@
 	});
 
 	// --------- View Private Methods --------- //
-	function sendMail() {
-		var view = this;
-		var $e = view.$el;
-
-		var content = $e.find("textarea[name='content']").val();
-		var to = $e.find("input[name='to']").val();
-		var subject = $e.find("input[name='subject']").val();
-		
-		// if mail id exist do update,else do create
-		app.actions.sendMail(to,subject,content).done(function() {
-			$(document).trigger("DO_REFRESH_MAIL");
-			view.close();
-		}); 
-
-
-	}
 
 	// --------- /View Private Methods --------- //
 

@@ -95,6 +95,12 @@
 	});
 	
 	/**
+	 */
+	Handlebars.registerHelper('html', function(str) {
+		return Handlebars.compile(str)();
+	});
+	
+	/**
 	 * we can use like this {{{tmpl "#tmpl-test" data}}}
 	 */
 	Handlebars.registerHelper('tmpl', function(template,data,options) {

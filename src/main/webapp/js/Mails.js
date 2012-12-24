@@ -21,10 +21,9 @@
             },
             events:{
             	"click;.btnAdd":function(e){
-            		console.log(1);
             		brite.display("MailInfo");
             	},
-            	"click;.btnEdit":function(e){
+            	"click;.btnView":function(e){
             		var view = this;
             		var $el = view.$el;
             		var $btn = $(e.currentTarget);
@@ -61,7 +60,6 @@
         		var list = data.result;
         		for(var i = 0; i < list.length; i++){
         			var obj = list[i];
-        			console.log(obj);
         			obj.index = i+1;
         			obj.type="Mail";
         			var $item = app.render("#tmpl-Mails-rowItem",obj);
