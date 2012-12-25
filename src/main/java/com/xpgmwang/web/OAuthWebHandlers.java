@@ -12,7 +12,6 @@ import com.britesnow.snow.web.handler.annotation.WebActionHandler;
 import com.britesnow.snow.web.handler.annotation.WebModelHandler;
 import com.britesnow.snow.web.param.annotation.WebModel;
 import com.britesnow.snow.web.param.annotation.WebParam;
-import com.google.code.samples.oauth2.OAuth2Authenticator;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.xpgmwang.oauth.OAuthManager;
@@ -23,7 +22,6 @@ public class OAuthWebHandlers {
 	@Inject
 	private OAuthManager oauthManager;
 	
-
 	@WebModelHandler(startsWith = "/authorize")
 	public void authorize(@WebModel Map m,@WebParam("service") String service,RequestContext rc) {
 		try {
@@ -58,7 +56,7 @@ public class OAuthWebHandlers {
             e.printStackTrace();
         }
         JSONObject opts = (JSONObject) JsonUtil.toMapAndList(response);
-        rc.setCookie("email", opts.get("email"));
-        OAuth2Authenticator.initialize();
+        email = (String) opts.get("email");
+        rc.setCookie("email", email);
 	}
 }

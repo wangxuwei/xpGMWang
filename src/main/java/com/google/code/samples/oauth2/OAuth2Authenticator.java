@@ -18,11 +18,11 @@ package com.google.code.samples.oauth2;
 import java.security.Provider;
 import java.security.Security;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.mail.Session;
 import javax.mail.URLName;
 
+import com.google.inject.Singleton;
 import com.sun.mail.imap.IMAPSSLStore;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.smtp.SMTPTransport;
@@ -33,12 +33,13 @@ import com.sun.mail.smtp.SMTPTransport;
  * <p>
  * Before using this class, you must call {@code initialize} to install the OAuth2 SASL provider.
  */
+@Singleton
 public class OAuth2Authenticator {
-    private static final Logger  logger        = Logger.getLogger(OAuth2Authenticator.class.getName());
+//    private static final Logger  logger        = Logger.getLogger(OAuth2Authenticator.class.getName());
 
-    private static IMAPStore     imapStore     = null;
-    private static SMTPTransport smtpTransport = null;
-    private static Session session = null;
+    private IMAPStore     imapStore     = null;
+    private SMTPTransport smtpTransport = null;
+    private Session session = null;
 
     public static final class OAuth2Provider extends Provider {
         private static final long serialVersionUID = 1L;
@@ -52,25 +53,38 @@ public class OAuth2Authenticator {
     /**
      * Installs the OAuth2 SASL provider. This must be called exactly once before calling other methods on this class.
      */
-    public static void initialize() {
+    public OAuth2Authenticator() {
         Security.addProvider(new OAuth2Provider());
     }
 
-    public static IMAPStore getImapStore(String email,String token) {
+    public Session getSMTPSession(String oauthToken) {
+        if(session == null){
+            Properties props = new Properties();
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.starttls.required", "true");
+            props.put("mail.smtp.sasl.enable", "true");
+            props.put("mail.smtp.sasl.mechanisms", "XOAUTH2");
+            props.put(OAuth2SaslClientFactory.OAUTH_TOKEN_PROP, oauthToken);
+            session = Session.getInstance(props);
+        }
+        return session;
+    }
+
+    public IMAPStore getImapStore(String email,String token) {
         if(imapStore == null){
             initImapAndSmtp(email,token);
         }
         return imapStore;
     }
 
-    public static SMTPTransport getSmtpTransport(String email,String token) {
+    public SMTPTransport getSmtpTransport(String email,String token) {
         if(smtpTransport == null){
             initImapAndSmtp(email,token);
         }
         return smtpTransport;
     }
     
-    private static void initImapAndSmtp(String email,String token){
+    private void initImapAndSmtp(String email,String token){
         try {
             imapStore = connectToImap("imap.gmail.com", 993, email, token, true);
             smtpTransport = connectToSmtp("smtp.gmail.com", 587, email, token, true);
@@ -95,7 +109,7 @@ public class OAuth2Authenticator {
      * 
      * @return An authenticated IMAPStore that can be used for IMAP operations.
      */
-    public static IMAPStore connectToImap(String host, int port, String userEmail, String oauthToken, boolean debug)
+    private IMAPStore connectToImap(String host, int port, String userEmail, String oauthToken, boolean debug)
                             throws Exception {
         Properties props = new Properties();
         props.put("mail.imaps.sasl.enable", "true");
@@ -127,9 +141,9 @@ public class OAuth2Authenticator {
      * 
      * @return An authenticated SMTPTransport that can be used for SMTP operations.
      */
-    public static SMTPTransport connectToSmtp(String host, int port, String userEmail, String oauthToken, boolean debug)
+    private SMTPTransport connectToSmtp(String host, int port, String userEmail, String oauthToken, boolean debug)
                             throws Exception {
-        Session session = getSession(oauthToken);
+        Session session = getSMTPSession(oauthToken);
         final URLName unusedUrlName = null;
         SMTPTransport transport = new SMTPTransport(session, unusedUrlName);
         // If the password is non-null, SMTP tries to do AUTH LOGIN.
@@ -137,19 +151,6 @@ public class OAuth2Authenticator {
         transport.connect(host, port, userEmail, emptyPassword);
 
         return transport;
-    }
-    
-    public static Session getSession(String oauthToken) {
-        if(session == null){
-            Properties props = new Properties();
-            props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.starttls.required", "true");
-            props.put("mail.smtp.sasl.enable", "true");
-            props.put("mail.smtp.sasl.mechanisms", "XOAUTH2");
-            props.put(OAuth2SaslClientFactory.OAUTH_TOKEN_PROP, oauthToken);
-            session = Session.getInstance(props);
-        }
-        return session;
     }
 
     /**

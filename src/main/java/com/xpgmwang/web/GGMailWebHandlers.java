@@ -21,17 +21,21 @@ import com.britesnow.snow.web.handler.annotation.WebModelHandler;
 import com.britesnow.snow.web.param.annotation.WebModel;
 import com.britesnow.snow.web.param.annotation.WebParam;
 import com.google.code.samples.oauth2.OAuth2Authenticator;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.smtp.SMTPTransport;
 
 @Singleton
 public class GGMailWebHandlers {
+    @Inject
+    private OAuth2Authenticator oauthAuthenticator;
+    
     @WebModelHandler(startsWith = "/listMails")
     public void listMails(@WebModel Map m, @WebParam("groupId") String groupId, RequestContext rc) {
         String token = rc.getUser(String.class);
         String email = rc.getCookie("email");
-        IMAPStore imap = OAuth2Authenticator.getImapStore(email,token);
+        IMAPStore imap = oauthAuthenticator.getImapStore(email,token);
         List result = new ArrayList();
         try{
             Folder folder = imap.getFolder("Inbox");
@@ -55,7 +59,7 @@ public class GGMailWebHandlers {
     public void getMail(@WebModel Map m, @WebParam("id") Integer id, RequestContext rc) {
         String token = rc.getUser(String.class);
         String email = rc.getCookie("email");
-        IMAPStore imap = OAuth2Authenticator.getImapStore(email,token);
+        IMAPStore imap = oauthAuthenticator.getImapStore(email,token);
         Map map = null;
         try{
             Folder folder = imap.getFolder("Inbox");
@@ -73,8 +77,8 @@ public class GGMailWebHandlers {
                             @WebParam("content") String content,@WebParam("to") String to, RequestContext rc) {
         String token = rc.getUser(String.class);
         String email = rc.getCookie("email");
-        SMTPTransport transport = OAuth2Authenticator.getSmtpTransport(email, token);
-        Session mailSession = OAuth2Authenticator.getSession(token);
+        SMTPTransport transport = oauthAuthenticator.getSmtpTransport(email, token);
+        Session mailSession = oauthAuthenticator.getSMTPSession(token);
         Message msg = new MimeMessage(mailSession);
         try {
             msg.setFrom(new InternetAddress(email));  
@@ -94,7 +98,7 @@ public class GGMailWebHandlers {
     public Object deleteMail(@WebModel Map m, @WebParam("id") Integer id, RequestContext rc) {
         String token = rc.getUser(String.class);
         String email = rc.getCookie("email");
-        IMAPStore imap = OAuth2Authenticator.getImapStore(email,token);
+        IMAPStore imap = oauthAuthenticator.getImapStore(email,token);
         try{
             Folder folder = imap.getFolder("Inbox");
             folder.open(Folder.READ_WRITE);
