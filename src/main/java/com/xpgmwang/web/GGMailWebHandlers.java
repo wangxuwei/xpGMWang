@@ -25,47 +25,83 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.smtp.SMTPTransport;
+import com.xpgmwang.util.JSONOptions;
 
 @Singleton
 public class GGMailWebHandlers {
     @Inject
     private OAuth2Authenticator oauthAuthenticator;
     
-    @WebModelHandler(startsWith = "/listMails")
-    public void listMails(@WebModel Map m, @WebParam("groupId") String groupId, RequestContext rc) {
+    @WebModelHandler(startsWith = "/listGroups")
+    public void listGroups(@WebModel Map m, RequestContext rc) {
         String token = rc.getUser(String.class);
         String email = rc.getCookie("email");
-        IMAPStore imap = oauthAuthenticator.getImapStore(email,token);
+        IMAPStore store = oauthAuthenticator.getImapStore(email,token);
         List result = new ArrayList();
         try{
-            Folder folder = imap.getFolder("Inbox");
+            Folder[] f = store.getDefaultFolder().list();
+            for(Folder fd:f){
+                Map map = new HashMap();
+                map.put("name", fd.getName());
+                map.put("id", fd.getName());
+                result.add(map);
+            }
+            store.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        m.put("result",result);
+    }
+    
+    @WebModelHandler(startsWith = "/listMails")
+    public void listMails(@WebModel Map m, @WebParam("groupId") String groupId, @WebParam("pageJsonInfo") String pageJsonInfo, RequestContext rc) {
+        JSONOptions opts = new JSONOptions(pageJsonInfo);
+        String token = rc.getUser(String.class);
+        String email = rc.getCookie("email");
+        IMAPStore store = oauthAuthenticator.getImapStore(email,token);
+        List result = new ArrayList();
+        int count = 0;
+        try{
+            String groupName = groupId == null || "".equals(groupId) ? "Inbox" : groupId;
+            Folder folder = store.getFolder(groupName);
             folder.open(Folder.READ_ONLY);
-            Message[] messages = folder.getMessages(folder.getMessageCount() - 10, folder.getMessageCount() - 1);
+            count = folder.getMessageCount();
+            int start = count - ((opts.getPageIndex() + 1) * opts.getPageSize() - 1);
+            int end = count - (opts.getPageIndex() * opts.getPageSize());
+            if(start < 1){
+                start = 1;
+            }
+            Message[] messages = folder.getMessages(start, end);
             if(messages != null){
-                for(int i = 0; i < messages.length; i++){
+                for(int i = messages.length - 1; i >= 0; i--){
                     Message message = messages[i];
                     Map map = getMapFromMessage(message,false);
                     map.put("id", message.getMessageNumber());
                     result.add(map);
                 }
             }
+            folder.close(false);
+            store.close();
         }catch(Exception e){
             e.printStackTrace();
         }
         m.put("result",result);
+        m.put("result_count",count);
     }
 
     @WebModelHandler(startsWith = "/getMail")
     public void getMail(@WebModel Map m, @WebParam("id") Integer id, RequestContext rc) {
         String token = rc.getUser(String.class);
         String email = rc.getCookie("email");
-        IMAPStore imap = oauthAuthenticator.getImapStore(email,token);
+        IMAPStore store = oauthAuthenticator.getImapStore(email,token);
         Map map = null;
         try{
-            Folder folder = imap.getFolder("Inbox");
+            Folder folder = store.getFolder("Inbox");
             folder.open(Folder.READ_ONLY);
             Message message = folder.getMessage(id);
             map = this.getMapFromMessage(message,true);
+            folder.close(false);
+            store.close();
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -88,6 +124,7 @@ public class GGMailWebHandlers {
             iaRecevers[0] = new InternetAddress(to);
             msg.setRecipients(Message.RecipientType.TO, iaRecevers);  
             transport.sendMessage(msg, msg.getAllRecipients());
+            transport.close();
         } catch (Exception e) {
             e.printStackTrace();
         }  
@@ -98,12 +135,14 @@ public class GGMailWebHandlers {
     public Object deleteMail(@WebModel Map m, @WebParam("id") Integer id, RequestContext rc) {
         String token = rc.getUser(String.class);
         String email = rc.getCookie("email");
-        IMAPStore imap = oauthAuthenticator.getImapStore(email,token);
+        IMAPStore store = oauthAuthenticator.getImapStore(email,token);
         try{
-            Folder folder = imap.getFolder("Inbox");
+            Folder folder = store.getFolder("Inbox");
             folder.open(Folder.READ_WRITE);
             Message message = folder.getMessage(id);
             message.setFlag(Flags.Flag.DELETED, true);
+            folder.close(false);
+            store.close();
         }catch(Exception e){
             e.printStackTrace();
         }

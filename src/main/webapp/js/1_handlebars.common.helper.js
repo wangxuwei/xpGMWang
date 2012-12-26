@@ -94,6 +94,20 @@
 		}
 	});
 	
+	Handlebars.registerHelper('gtt', function(a,b,c,options) {
+		  if(a - b - c > 0) {
+		    return options.fn(this);
+		  } else {
+		    return options.inverse(this);
+		  }
+	});
+	
+	/**
+	 */
+	Handlebars.registerHelper('print', function(a) {
+		console.log(a);
+	});
+	
 	/**
 	 */
 	Handlebars.registerHelper('html', function(str) {

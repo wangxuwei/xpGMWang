@@ -18,33 +18,14 @@
                 refresh.call(view);
             },
             events:{
-            	"click;.btnAdd":function(e){
-            		brite.display("GroupInfo",null,{id:null});
-            	},
-            	"click;.btnEdit":function(e){
-            		var view = this;
-            		var $el = view.$el;
-            		var $btn = $(e.currentTarget);
-            		var id = $btn.bEntity().id;
-            		brite.display("GroupInfo",null,{id:id});
-            	},
-            	"click;.btnDelete":function(e){
-            		var view = this;
-            		var $el = view.$el;
-            		var $btn = $(e.currentTarget);
-            		var id = $btn.bEntity().id;
-            		app.actions.deleteGroup(id).done(function(){
-	            		refresh.call(view);
-            		});
-            	},
             	"click;.item":function(e){
             		var view = this;
             		var $el = view.$el;
             		var $btn = $(e.currentTarget);
-            		var id = $btn.closest(".trow").attr("data-entity-fullId");
+            		var id = $btn.closest(".trow").attr("data-entity-id");
             		console.log(id);
-            		brite.display("Contacts",null,{groupId:id});
-            	},
+            		brite.display("Mails",null,{groupId:id});
+            	}
             },
 
             docEvents:{
@@ -69,11 +50,6 @@
         			obj.type="Group";
         			obj.show = false;
         			var name = obj.name;
-        			if(typeof name == 'undefined' || name == null || name == "" || name.indexOf("System") != 0){
-        				obj.show = true;
-        			}else{
-        				obj.name = obj.name.replace("System Group:","");
-        			}
         			var $item = app.render("#tmpl-Groups-rowItem",obj);
         			$tbody.append($item);
         		}

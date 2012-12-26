@@ -71,17 +71,26 @@ public class OAuth2Authenticator {
     }
 
     public IMAPStore getImapStore(String email,String token) {
-        if(imapStore == null){
-            initImapAndSmtp(email,token);
+//        if(imapStore == null){
+//            initImapAndSmtp(email,token);
+//        }
+        try {
+            return connectToImap("imap.gmail.com", 993, email, token, true);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        return imapStore;
+        return null;
     }
 
     public SMTPTransport getSmtpTransport(String email,String token) {
-        if(smtpTransport == null){
-            initImapAndSmtp(email,token);
+        try {
+            return connectToSmtp("smtp.gmail.com", 587, email, token, true);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        return smtpTransport;
+        return null;
     }
     
     private void initImapAndSmtp(String email,String token){

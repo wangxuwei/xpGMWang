@@ -15,7 +15,7 @@
                 var view = this;
                 var $e = view.$el;
                 brite.display("Mails");
-                //brite.display("Groups");
+                brite.display("Groups");
             },
             events:{
             },

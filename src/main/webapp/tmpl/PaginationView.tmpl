@@ -1,0 +1,61 @@
+<script id="tmpl-PaginationView" type="text/html">
+	<div class="PaginationView">
+	</div>
+</script>
+<script id="tmpl-PaginationView-info" type="text/html">
+	<div class="paginationInfo">
+		{{#gt pageCount 1}}
+		<span class="goto">
+			<span class="gotoBtn">Go to:</span>
+			<input name="gotoPage" type="text" value="{{pageNum}}" />
+		</span>
+		{{/gt}}
+		<span class="showRows">
+			Show Rows
+			<select name="pageSize">
+			<option {{#equal pageCount 15}}selected{{/equal}}>15</option>
+			<option {{#equal pageCount 25}}selected{{/equal}}>25</option>
+			<option {{#equal pageCount 50}}selected{{/equal}}>50</option>
+			<option {{#equal pageCount 100}}selected{{/equal}}>100</option>
+			<option {{#equal pageCount 500}}selected{{/equal}}>500</option>
+			</select>
+		</span>
+		<span class="info">{{startRows}} - {{endRows}} of {{sizeCount}}</span>
+		{{#gt pageCount 1}}
+			<span class="nums">
+				<span class="prevStart {{#unless isFirst}}action{{/unless}}">&lt;&lt;</span>
+				<span class="prev {{#unless isFirst}}action{{/unless}}">&lt;</span>
+				{{#lt pageNum 3}}
+					{{#gt pageCount 6}} 
+						{{#each getArrayFrom1To6}}
+							{{{print this.parent}}}
+							<span class="pageNum {{#notEqual this.num ../pageNum}}action{{/notEqual}}" data-num='{{this.num}}'>{{this.num}}</span> 
+						{{/each}}
+					{{else}}
+						{{#each getArrayFrom1ToPC }}
+							<span class="pageNum {{#notEqual this.num ../pageNum}}action{{/notEqual}}" data-num='{{this.num}}'>{{this.num}}</span> 
+						{{/each}}
+					{{/gt}}
+				{{else}}
+					{{#gtt pageCount pageNum 3 }}
+						{{#each getArrayFromPr2ToPa3}}
+							<span class="pageNum {{#notEqual this.num ../pageNum}}action{{/notEqual}}" data-num='{{this.num}}'>{{this.num}}</span> 
+						{{/each}}
+					{{else}}
+						{{#gt pageCount 6}}
+							{{#each getArrayFromPCr6ToPC}}
+								<span class="pageNum {{#notEqual this.num ../pageNum}}action{{/notEqual}}" data-num='{{this.num}}'>{{this.num}}</span> 
+							{{/each}}
+						{{else}}
+							{{#each getArrayFrom1ToPC}}
+								<span class="pageNum {{#notEqual this.num ../pageNum}}action{{/notEqual}}" data-num='{{this.num}}'>{{this.num}}</span> 
+							{{/each}}
+						{{/gt}}
+					{{/gtt}}
+				{{/lt}}
+				<span class="next {{#unless isLast}}action{{/unless}}">&gt;</span>
+				<span class="nextEnd {{#unless isLast}}action{{/unless}}">&gt;&gt;</span>
+			</span>
+		{{/gt}}
+	</div>
+</script>

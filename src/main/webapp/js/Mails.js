@@ -17,7 +17,13 @@
                 var view = this;
                 var $e = view.$el;
                 
-                refresh.call(view);
+
+				brite.display("PaginationView", $e.find(".pagesContent"), {
+					$target : $e
+				}).done(function(paginationView) {
+					view.paginationView = paginationView;
+					refresh.call(view);
+				}); 
             },
             events:{
             	"click;.btnAdd":function(e){
@@ -47,16 +53,20 @@
             	}
             },
 
-            daoEvents:{
+            events:{
+            	"DO_PAGE_CHANGE":function(e,extra){
+            		var view = this;
+					refresh.call(view,extra.pageIndex,extra.pageSize);
+            	}
             }
         });
         
-        function refresh(){
+        function refresh(pageIndex,pageSize){
         	var view = this;
         	var $e = view.$el;
         	var $tbody = $e.find(".lists").empty();
-        	app.actions.listMails(view.groupId).done(function(data){
-        		console.log(data);
+        	pageSize = pageSize || 15;
+        	app.actions.listMails(view.groupId,{pageIndex:pageIndex,pageSize:pageSize}).done(function(data){
         		var list = data.result;
         		for(var i = 0; i < list.length; i++){
         			var obj = list[i];
@@ -65,6 +75,7 @@
         			var $item = app.render("#tmpl-Mails-rowItem",obj);
         			$tbody.append($item);
         		}
+        		view.paginationView.refresh(data.result_count,pageSize);
 			});
 
         }
