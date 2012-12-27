@@ -1,8 +1,12 @@
 package com.xpgmwang;
 
 import com.britesnow.snow.web.auth.AuthRequest;
+import com.britesnow.snow.web.handler.annotation.WebActionHandler;
+import com.britesnow.snow.web.handler.annotation.WebModelHandler;
 import com.google.inject.AbstractModule;
+import com.google.inject.matcher.Matchers;
 import com.xpgmwang.web.GMAuthRequest;
+import com.xpgmwang.web.OAuthInterceptor;
 
 
 
@@ -20,6 +24,10 @@ public class GMConfig extends AbstractModule {
     protected void configure() {
 
         bind(AuthRequest.class).to(GMAuthRequest.class);
+        OAuthInterceptor oauthInterceptor = new OAuthInterceptor();
+        requestInjection(oauthInterceptor);
+        bindInterceptor(Matchers.any(), Matchers.annotatedWith(WebModelHandler.class),oauthInterceptor);
+        bindInterceptor(Matchers.any(), Matchers.annotatedWith(WebActionHandler.class),oauthInterceptor);
     }
 
 }

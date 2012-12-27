@@ -144,6 +144,7 @@ public class GGMailWebHandlers {
             Folder folder = store.getFolder("Inbox");
             folder.open(Folder.READ_WRITE);
             Message message = folder.getMessage(id);
+            message.setFlag(Flags.Flag.DELETED, true);
             folder.close(false);
             store.close();
         }catch(Exception e){

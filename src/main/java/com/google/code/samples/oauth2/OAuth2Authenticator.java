@@ -37,8 +37,6 @@ import com.sun.mail.smtp.SMTPTransport;
 public class OAuth2Authenticator {
 //    private static final Logger  logger        = Logger.getLogger(OAuth2Authenticator.class.getName());
 
-    private IMAPStore     imapStore     = null;
-    private SMTPTransport smtpTransport = null;
     private Session session = null;
 
     public static final class OAuth2Provider extends Provider {
@@ -77,8 +75,11 @@ public class OAuth2Authenticator {
         try {
             return connectToImap("imap.gmail.com", 993, email, token, true);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if(e instanceof javax.mail.AuthenticationFailedException){
+                throw new AuthException();
+            }else{
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -87,21 +88,15 @@ public class OAuth2Authenticator {
         try {
             return connectToSmtp("smtp.gmail.com", 587, email, token, true);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if(e instanceof javax.mail.AuthenticationFailedException){
+                throw new AuthException();
+            }else{
+                e.printStackTrace();
+            }
         }
         return null;
     }
     
-    private void initImapAndSmtp(String email,String token){
-        try {
-            imapStore = connectToImap("imap.gmail.com", 993, email, token, true);
-            smtpTransport = connectToSmtp("smtp.gmail.com", 587, email, token, true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Connects and authenticates to an IMAP server with OAuth2. You must have called {@code initialize}.
      * 
@@ -161,7 +156,8 @@ public class OAuth2Authenticator {
 
         return transport;
     }
-
+    
+    
     /**
      * Authenticates to IMAP with parameters passed in on the commandline.
      */
