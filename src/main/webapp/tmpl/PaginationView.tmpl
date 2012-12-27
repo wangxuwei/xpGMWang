@@ -28,7 +28,6 @@
 				{{#lt pageNum 3}}
 					{{#gt pageCount 6}} 
 						{{#each getArrayFrom1To6}}
-							{{{print this.parent}}}
 							<span class="pageNum {{#notEqual this.num ../pageNum}}action{{/notEqual}}" data-num='{{this.num}}'>{{this.num}}</span> 
 						{{/each}}
 					{{else}}

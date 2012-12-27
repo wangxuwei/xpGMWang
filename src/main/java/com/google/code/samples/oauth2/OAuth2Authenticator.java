@@ -125,7 +125,7 @@ public class OAuth2Authenticator {
         props.put("mail.imaps.sasl.mechanisms", "XOAUTH2");
         props.put(OAuth2SaslClientFactory.OAUTH_TOKEN_PROP, oauthToken);
         Session session = Session.getInstance(props);
-        session.setDebug(debug);
+//        session.setDebug(debug);
 
         final URLName unusedUrlName = null;
         IMAPSSLStore store = new IMAPSSLStore(session, unusedUrlName);

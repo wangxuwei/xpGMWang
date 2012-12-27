@@ -44,6 +44,10 @@
             		app.actions.deleteMail(id).done(function(){
 	            		refresh.call(view);
             		});
+            	},
+            	"DO_PAGE_CHANGE":function(e,extra){
+            		var view = this;
+					refresh.call(view,extra.pageIndex,extra.pageSize);
             	}
             },
 
@@ -51,14 +55,8 @@
             	"DO_REFRESH_MAIL":function(){
             		refresh.call(this);
             	}
-            },
-
-            events:{
-            	"DO_PAGE_CHANGE":function(e,extra){
-            		var view = this;
-					refresh.call(view,extra.pageIndex,extra.pageSize);
-            	}
             }
+
         });
         
         function refresh(pageIndex,pageSize){

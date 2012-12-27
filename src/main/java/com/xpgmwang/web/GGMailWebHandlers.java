@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.FetchProfile;
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -72,6 +73,9 @@ public class GGMailWebHandlers {
                 start = 1;
             }
             Message[] messages = folder.getMessages(start, end);
+            FetchProfile fp = new FetchProfile();
+            fp.add(FetchProfile.Item.ENVELOPE);
+            folder.fetch(messages, fp);
             if(messages != null){
                 for(int i = messages.length - 1; i >= 0; i--){
                     Message message = messages[i];
@@ -140,7 +144,6 @@ public class GGMailWebHandlers {
             Folder folder = store.getFolder("Inbox");
             folder.open(Folder.READ_WRITE);
             Message message = folder.getMessage(id);
-            message.setFlag(Flags.Flag.DELETED, true);
             folder.close(false);
             store.close();
         }catch(Exception e){
