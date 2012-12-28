@@ -13,11 +13,11 @@
 		<span class="showRows">
 			Show Rows
 			<select name="pageSize">
-			<option {{#equal pageCount 15}}selected{{/equal}}>15</option>
-			<option {{#equal pageCount 25}}selected{{/equal}}>25</option>
-			<option {{#equal pageCount 50}}selected{{/equal}}>50</option>
-			<option {{#equal pageCount 100}}selected{{/equal}}>100</option>
-			<option {{#equal pageCount 500}}selected{{/equal}}>500</option>
+			<option {{#equal pageSize 15}}selected{{/equal}}>15</option>
+			<option {{#equal pageSize 25}}selected{{/equal}}>25</option>
+			<option {{#equal pageSize 50}}selected{{/equal}}>50</option>
+			<option {{#equal pageSize 100}}selected{{/equal}}>100</option>
+			<option {{#equal pageSize 500}}selected{{/equal}}>500</option>
 			</select>
 		</span>
 		<span class="info">{{startRows}} - {{endRows}} of {{sizeCount}}</span>
