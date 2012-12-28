@@ -20,8 +20,7 @@ var app = app || {};
 			  data : params,
 			  dataType : "json"
 		  }).success(function(data) {
-		  	console.log(data);
-		  	  if(data.AUTH_FAILED){
+		  	  if(data && data.AUTH_FAILED){
 		  	  	window.location = contextPath + "/";
 		  	  }
 			  dfd.resolve(data);

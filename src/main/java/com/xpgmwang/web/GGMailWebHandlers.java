@@ -111,6 +111,26 @@ public class GGMailWebHandlers {
         }
         m.put("result",map);
     }
+    @WebModelHandler(startsWith = "/replyMail")
+    public void replyMail(@WebModel Map m, @WebParam("id") Integer id, RequestContext rc) {
+        String token = rc.getUser(String.class);
+        String email = rc.getCookie("email");
+        IMAPStore store = oauthAuthenticator.getImapStore(email,token);
+        Map map = null;
+        try{
+            Folder folder = store.getFolder("Inbox");
+            folder.open(Folder.READ_ONLY);
+            Message message = folder.getMessage(id);
+            Message messageReply = message.reply(false);
+            map = this.getMapFromMessage(messageReply,true);
+            map.put("to", message.getFrom()[0]);
+            folder.close(false);
+            store.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        m.put("result",map);
+    }
 
     @WebActionHandler
     public Object sendMail(@WebModel Map m, @WebParam("subject") String subject,

@@ -13,6 +13,11 @@ var app = app || {};
 		params.id = id;
 		return app.getJsonData(contextPath+"/getMail.json",params);
 	}
+	app.actions.replyMail = function(id){
+		var params = {mehotd:"Get"};
+		params.id = id;
+		return app.getJsonData(contextPath+"/replyMail.json",params);
+	}
 	app.actions.sendMail = function(to,subject,content){
 		var params = {mehotd:"Post"};
 		params.to = to;

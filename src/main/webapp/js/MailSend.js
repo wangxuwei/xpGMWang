@@ -12,7 +12,9 @@
 		create : function(data, config) {
 			var view = this;
 			var dfd = $.Deferred();
-			var $html = app.render("#tmpl-MailSend");
+			data = data || {};
+			var mail = data.mail || {to:{}};
+			var $html = app.render("#tmpl-MailSend",mail);
 			//show a screen to prevent use click other places
 			view.$screen = $("<div class='notTransparentScreen'></div>").appendTo("body"); 
 			return $html;

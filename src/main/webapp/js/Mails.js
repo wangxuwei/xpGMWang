@@ -36,6 +36,16 @@
             		var id = $btn.bEntity().id;
             		brite.display("MailInfo",null,{id:id});
             	},
+            	"click;.btnReply":function(e){
+            		var view = this;
+            		var $el = view.$el;
+            		var $btn = $(e.currentTarget);
+            		var id = $btn.bEntity().id;
+            		app.actions.replyMail(id).done(function(val){
+            			var mail = val.result;
+	            		brite.display("MailSend",null,{mail:mail});
+            		});
+            	},
             	"click;.btnDelete":function(e){
             		var view = this;
             		var $el = view.$el;
