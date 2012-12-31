@@ -7,7 +7,7 @@
     (function ($) {
         brite.registerView("MainScreen",  {loadTmpl:true}, {
             create:function (data, config) {
-                var $html = app.render("#tmpl-MainScreen");
+                var $html = app.render("tmpl-MainScreen");
                 var $e = $($html);
                 return $e;
             },

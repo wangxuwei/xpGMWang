@@ -12,3 +12,4 @@ target/
 # the bin/ folder is the way Snow recommend to output it's .class in eclipse
 # so that snowJetty can take those classes and run the app without having to do a mvn package
 bin/
+build.xml

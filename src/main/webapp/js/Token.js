@@ -14,7 +14,7 @@
 			data = data || {};
 			view.service = data.service || "GG";
 			
-			var $html = app.render("#tmpl-Token");
+			var $html = app.render("tmpl-Token");
 				//show a screen to prevent use click other places
 			view.$screen = $("<div class='notTransparentScreen'></div>").appendTo("body");
 			return $html;

@@ -9,7 +9,7 @@
 
         brite.registerView("PaginationView",  {loadTmpl:true,emptyParent:true}, {
             create:function (data, config) {
-                var html = app.render("#tmpl-PaginationView");
+                var html = app.render("tmpl-PaginationView");
                 var $e = $(html);
                 var view = this;
                 view.$target = data.$target;
@@ -85,7 +85,7 @@
     				pagination = new app.Pagination(view.count, null,pageSize);
     				view.pagination = pagination;
     			}
-    			var html = app.render("#tmpl-PaginationView-info",pagination.getPageInfo());
+    			var html = app.render("tmpl-PaginationView-info",pagination.getPageInfo());
     			$e.empty().append($(html));
             }
         });

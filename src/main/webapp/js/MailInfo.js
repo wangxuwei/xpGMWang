@@ -24,7 +24,7 @@
 			
 			$.when(dfd).done(function(mail) {
 				console.log(1);
-				var $html = app.render("#tmpl-MailInfo",mail);
+				var $html = app.render("tmpl-MailInfo",mail);
 				//show a screen to prevent use click other places
 				view.$screen = $("<div class='notTransparentScreen'></div>").appendTo("body");
 				createDfd.resolve($html);

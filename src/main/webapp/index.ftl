@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="${_r.contextPath}/bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="${_r.contextPath}/bootstrap/css/bootstrap-responsive.css" />
     
-    <link rel="stylesheet" type="text/css" href="${_r.contextPath}/css/import.less.css">
+    <link rel="stylesheet" type="text/css" href="${_r.contextPath}/css/all.css">
     [@webBundle path="/js/" type="js" /]
     
     [#-- Global Initialization --] 

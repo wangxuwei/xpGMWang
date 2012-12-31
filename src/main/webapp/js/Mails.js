@@ -9,7 +9,7 @@
             create:function (data, config) {
             	data = data || {};
             	this.groupId = data.groupId;
-                var $html = app.render("#tmpl-Mails",data);
+                var $html = app.render("tmpl-Mails",data);
                 var $e = $($html);
                 return $e;
             },
@@ -80,7 +80,7 @@
         			var obj = list[i];
         			obj.index = i+1;
         			obj.type="Mail";
-        			var $item = app.render("#tmpl-Mails-rowItem",obj);
+        			var $item = app.render("tmpl-Mails-rowItem",obj);
         			$tbody.append($item);
         		}
         		view.paginationView.refresh(data.result_count,pageSize);

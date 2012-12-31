@@ -7,7 +7,7 @@
     (function ($) {
         brite.registerView("Groups",  {loadTmpl:true,emptyParent:true,parent:".MainScreen-main .groupsArea"}, {
             create:function (data, config) {
-                var $html = app.render("#tmpl-Groups",data);
+                var $html = app.render("tmpl-Groups",data);
                 var $e = $($html);
                 return $e;
             },
@@ -50,7 +50,7 @@
         			obj.type="Group";
         			obj.show = false;
         			var name = obj.name;
-        			var $item = app.render("#tmpl-Groups-rowItem",obj);
+        			var $item = app.render("tmpl-Groups-rowItem",obj);
         			$tbody.append($item);
         		}
 			});
