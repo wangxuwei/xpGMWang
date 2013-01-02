@@ -31,13 +31,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 						<phase>package</phase>
 						<configuration>
 							<tasks>
-								
 								<exec executable="java">
 							        <arg line="-jar"/>
     								<arg line="apps/jcruncherEx.jar"/>
 							 	</exec>
-							 	
-							 	<!--<ant antfile="build.xml" />-->
 								<mkdir dir="../war"/>
 								<delete includeemptydirs="true">
 									<fileset dir="../war" includes="**/*" excludes=".git/"/>

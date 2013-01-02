@@ -13,3 +13,5 @@ target/
 # so that snowJetty can take those classes and run the app without having to do a mvn package
 bin/
 build.xml
+src/main/webapp/js/templates.js
+src/main/webapp/css/
