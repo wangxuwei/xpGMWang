@@ -76,6 +76,7 @@
         	pageSize = pageSize || 15;
         	app.actions.listMails(view.groupId,{pageIndex:pageIndex,pageSize:pageSize}).done(function(data){
         		var list = data.result;
+        		console.log(list);
         		for(var i = 0; i < list.length; i++){
         			var obj = list[i];
         			obj.index = i+1;
